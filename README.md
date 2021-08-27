@@ -1,5 +1,4 @@
-# EvsSimpleGraph
-A simple graph control
+# NetworkGraph
+A module for network modelling, planning and analysis. Built on the TEvsSimpleGraph, a port of the Delphiarea TSimplegraph component. 
 ![alter text](/ScreenShots/3.png?raw=true "This is a title")
-Port of the delphiarea TSimpleGraph for delphi to lazarus and lcl. Ideally this component will support most major widget sets including but not limited to win32, gtk2, QT.
 Original component at http://www.delphiarea.com/products/delphi-components/simplegraph/ 
