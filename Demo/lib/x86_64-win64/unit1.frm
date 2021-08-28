@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 371
+  Left = 86
   Height = 718
-  Top = 367
+  Top = 85
   Width = 1159
   Caption = 'NetAnalyse'
   ClientHeight = 693
@@ -905,9 +905,6 @@ object Form1: TForm1
         Caption = 'Save Graph As. . . '
         OnClick = MenuItem15Click
       end
-      object MenuItem31: TMenuItem
-        Caption = 'Save Graph Image . . .'
-      end
       object MenuItem14: TMenuItem
         Caption = '-'
       end
@@ -921,6 +918,8 @@ object Form1: TForm1
           end
           object MenuItem24: TMenuItem
             Caption = 'ISIS CLI'
+            Enabled = False
+            OnClick = MenuItem24Click
           end
         end
         object MenuItem22: TMenuItem
@@ -929,21 +928,20 @@ object Form1: TForm1
             Caption = 'ISIS CLI'
             OnClick = MenuItem25Click
           end
-          object MenuItem26: TMenuItem
-            Caption = 'MenuItem26'
-          end
         end
       end
       object MenuItem7: TMenuItem
         Caption = 'Import '
         object MenuItem27: TMenuItem
           Caption = 'GraphML'
+          Enabled = False
         end
       end
       object MenuItem8: TMenuItem
         Caption = 'Export'
         object MenuItem28: TMenuItem
           Caption = 'GraphML'
+          Enabled = False
         end
         object MenuItem29: TMenuItem
           Caption = 'Picture'
@@ -1523,8 +1521,8 @@ object Form1: TForm1
     Top = 128
   end
   object GraphMenu: TPopupMenu
-    Left = 210
-    Top = 227
+    Left = 192
+    Top = 200
     object MenuItem34: TMenuItem
       Caption = 'GraphMenu'
     end

@@ -73,13 +73,11 @@ type
     MenuItem23: TMenuItem;
     MenuItem24: TMenuItem;
     MenuItem25: TMenuItem;
-    MenuItem26: TMenuItem;
     MenuItem27: TMenuItem;
     MenuItem28: TMenuItem;
     MenuItem29: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem30: TMenuItem;
-    MenuItem31: TMenuItem;
     MenuItem32: TMenuItem;
     MenuItem33: TMenuItem;
     MenuItem34: TMenuItem;
@@ -187,9 +185,11 @@ type
     procedure MenuItem19Click(Sender: TObject);
     procedure MenuItem20Click(Sender: TObject);
     procedure MenuItem23Click(Sender: TObject);
+    procedure MenuItem24Click(Sender: TObject);
     procedure MenuItem25Click(Sender: TObject);
     procedure MenuItem29Click(Sender: TObject);
     procedure MenuItem30Click(Sender: TObject);
+    procedure MenuItem31Click(Sender: TObject);
     procedure MenuItem32Click(Sender: TObject);
     procedure MenuItem33Click(Sender: TObject);
     procedure MenuItem35Click(Sender: TObject);
@@ -1060,6 +1060,7 @@ begin
   CheckListBox2.Sorted := True;
 end;
 
+
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
   Graph1.Destroy;
@@ -1092,6 +1093,8 @@ end;
 procedure TForm1.MenuItem12Click(Sender: TObject);
 begin
   Graph1.Clear;
+  Graph1.OSFilename := '';
+  Caption := 'NetAnalyse:  ' + Graph1.OSFilename;
 end;
 
 procedure TForm1.MenuItem13Click(Sender: TObject);
@@ -1150,8 +1153,8 @@ var
   Node1 : TPseudoNode;
   Rect1 : TRect;
 begin
-  Rect1.Top:= 20;
-  Rect1.Left:= 20;
+  Rect1.Top := 20;
+  Rect1.Left := 20;
   Rect1.Height := 50;
   Rect1.Width := 50;
 
@@ -1163,7 +1166,11 @@ begin
 end;
 
 procedure TForm1.MenuItem19Click(Sender: TObject);
+var
+  Link1 : TRouterLink;
 begin
+
+  Link1 := Graph1.InsertLink(ComboBox1.Items.Objects[ComboBox1.ItemIndex] as TRouterNode, ComboBox2.Items.Objects[ComboBox2.ItemIndex] as TRouterNode, TRouterLink) as TRouterLink;
 
 end;
 
@@ -1177,15 +1184,21 @@ end;
 
 procedure TForm1.MenuItem23Click(Sender: TObject);
 begin
+  OpenDialog1.Filter := 'Junos XML Output (*.xml)|*.xml';
   If OpenDialog1.Execute then
     Graph1.LoadJunosISISXML(OpenDialog1.FileName, '.\router1.bmp');
 //  Graph1.LoadJunosISISXML('.\prod-isis-l2-extensive.xml');
 end;
 
+procedure TForm1.MenuItem24Click(Sender: TObject);
+begin
+
+end;
+
 procedure TForm1.MenuItem25Click(Sender: TObject);
 begin
     If OpenDialog1.Execute then
-    Graph1.LoadCiscoISISCLI(OpenDialog1.FileName);
+    Graph1.LoadCiscoISISCLI(OpenDialog1.FileName, '.\router1.bmp');
 end;
 
 procedure TForm1.MenuItem29Click(Sender: TObject);
@@ -1197,6 +1210,11 @@ end;
 procedure TForm1.MenuItem30Click(Sender: TObject);
 begin
   Form1.Close;
+end;
+
+procedure TForm1.MenuItem31Click(Sender: TObject);
+begin
+
 end;
 
 procedure TForm1.MenuItem32Click(Sender: TObject);

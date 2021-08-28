@@ -22,7 +22,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <CursorPos X="89" Y="8"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="1150"/>
+        <CursorPos X="14" Y="1157"/>
         <UsageCount Value="201"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -35,7 +37,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit2"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="62"/>
         <CursorPos X="38" Y="86"/>
         <UsageCount Value="200"/>
@@ -50,20 +52,28 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit3"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="8"/>
-        <CursorPos X="3" Y="45"/>
+        <CursorPos X="57" Y="32"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\NetworkGraph.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="472"/>
+        <CursorPos X="120" Y="491"/>
+        <UsageCount Value="28"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="usimplegraphext.pas"/>
         <UnitName Value="NetworkGraph"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="18"/>
-        <UsageCount Value="201"/>
+        <UsageCount Value="200"/>
       </Unit>
       <Unit>
         <Filename Value="C:\Users\o7535513\Downloads\EvsSimpleGraph - Copy\EvsSimpleGraph\usimplegraph.pas"/>
@@ -71,7 +81,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2980"/>
         <CursorPos X="41" Y="3007"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="15"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\include\control.inc"/>
@@ -79,17 +89,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2901"/>
         <CursorPos Y="2914"/>
-        <UsageCount Value="83"/>
+        <UsageCount Value="82"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\xmlpropstorage.pas"/>
         <FRMtype Value="0"/>
         <UnitName Value="XMLPropStorage"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="175"/>
-        <CursorPos X="32" Y="186"/>
+        <CursorPos Y="191"/>
         <UsageCount Value="104"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\fpcsrc\rtl\objpas\fgl.pp"/>
@@ -97,7 +106,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1021"/>
         <CursorPos Y="1033"/>
-        <UsageCount Value="76"/>
+        <UsageCount Value="75"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\include\buttoncontrol.inc"/>
@@ -105,15 +114,15 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="44"/>
         <CursorPos Y="56"/>
-        <UsageCount Value="111"/>
+        <UsageCount Value="110"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\fpcsrc\rtl\objpas\classes\classesh.inc"/>
         <FRMtype Value="0"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="102"/>
-        <CursorPos X="36" Y="118"/>
-        <UsageCount Value="33"/>
+        <CursorPos X="9" Y="135"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -122,7 +131,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="662"/>
         <CursorPos Y="677"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="17"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\lcltype.pp"/>
@@ -131,7 +140,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="3024"/>
         <CursorPos Y="3047"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="17"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\grids.pas"/>
@@ -140,7 +149,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="11149"/>
         <CursorPos Y="11161"/>
-        <UsageCount Value="110"/>
+        <UsageCount Value="109"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\include\wincontrol.inc"/>
@@ -148,7 +157,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="4320"/>
         <CursorPos Y="4335"/>
-        <UsageCount Value="95"/>
+        <UsageCount Value="94"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\components\BaseUtils\laztracer.pas"/>
@@ -157,7 +166,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
         <CursorPos X="5" Y="52"/>
-        <UsageCount Value="95"/>
+        <UsageCount Value="94"/>
       </Unit>
       <Unit>
         <Filename Value="..\EvsSimpleGraph-master\usimplegraph.pas"/>
@@ -166,7 +175,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1683"/>
         <CursorPos X="14" Y="1710"/>
-        <UsageCount Value="117"/>
+        <UsageCount Value="116"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\interfaces\win32\win32callback.inc"/>
@@ -174,7 +183,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1958"/>
         <CursorPos Y="1977"/>
-        <UsageCount Value="69"/>
+        <UsageCount Value="68"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\interfaces\win32\win32object.inc"/>
@@ -182,7 +191,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="354"/>
         <CursorPos Y="373"/>
-        <UsageCount Value="69"/>
+        <UsageCount Value="68"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\typhon\lcl\include\application.inc"/>
@@ -190,145 +199,138 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="995"/>
         <CursorPos Y="1013"/>
-        <UsageCount Value="69"/>
+        <UsageCount Value="68"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\..\CT Project\EvsSimpleGraph-master\usimplegraph.pas"/>
         <FRMtype Value="0"/>
         <UnitName Value="uSimpleGraph"/>
-        <EditorIndex Value="1"/>
-        <UsageCount Value="10"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="1821"/>
+        <CursorPos X="77" Y="1837"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\NetworkGraph.pas"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="unit2.pas"/>
-        <Caret Line="113" Column="53" TopLine="106"/>
-      </Position>
-      <Position>
-        <Filename Value="unit2.pas"/>
-        <Caret Line="114" Column="53" TopLine="107"/>
-      </Position>
-      <Position>
-        <Filename Value="unit2.pas"/>
-        <Caret Line="113" Column="53" TopLine="106"/>
-      </Position>
-      <Position>
-        <Filename Value="unit2.pas"/>
-        <Caret Line="115" Column="53" TopLine="108"/>
+        <Filename Value="..\NetworkGraph.pas"/>
+        <Caret Line="307" Column="3" TopLine="279"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="1400" Column="92" TopLine="1376"/>
+        <Caret Line="1183" Column="28" TopLine="1180"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="838" TopLine="837"/>
+        <Caret Line="1211" Column="10" TopLine="1180"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="839" TopLine="839"/>
+        <Caret Line="1101" Column="3" TopLine="1099"/>
+      </Position>
+      <Position>
+        <Filename Value="..\NetworkGraph.pas"/>
+        <Caret Line="350" Column="65" TopLine="343"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="775" Column="19" TopLine="770"/>
+        <Caret Line="1101" Column="3" TopLine="1099"/>
+      </Position>
+      <Position>
+        <Filename Value="..\NetworkGraph.pas"/>
+        <Caret Line="347" Column="14" TopLine="343"/>
+      </Position>
+      <Position>
+        <Filename Value="..\NetworkGraph.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="..\NetworkGraph.pas"/>
+        <Caret Line="191" Column="50" TopLine="162"/>
+      </Position>
+      <Position>
+        <Filename Value="..\NetworkGraph.pas"/>
+        <Caret Line="190" Column="30" TopLine="162"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="220" Column="40" TopLine="204"/>
+        <Caret Line="1191" Column="54" TopLine="1188"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="787" Column="54" TopLine="769"/>
+        <Caret Line="1183" Column="3" TopLine="1181"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="775" Column="17" TopLine="758"/>
+        <Caret Line="1191" Column="3" TopLine="1181"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="771" TopLine="760"/>
+        <Caret Line="1190" Column="3" TopLine="1180"/>
+      </Position>
+      <Position>
+        <Filename Value="NetAnalyse.ppr"/>
+        <Caret Line="23"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="220" Column="40" TopLine="204"/>
+        <Caret Line="1190" Column="3" TopLine="1180"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="219" Column="40" TopLine="203"/>
+        <Caret Line="1136" Column="3" TopLine="1131"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="771" TopLine="769"/>
+        <Caret Line="1190" Column="9" TopLine="1164"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="229" Column="19" TopLine="203"/>
+        <Caret Line="1056" TopLine="1056"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="769" TopLine="756"/>
+        <Caret Line="1171" Column="16" TopLine="1168"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="175" TopLine="159"/>
+        <Caret Line="419" Column="3" TopLine="414"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="219" Column="40" TopLine="203"/>
+        <Caret Line="457" Column="148" TopLine="443"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="220" Column="40" TopLine="204"/>
+        <Caret Line="1176" TopLine="1169"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="772" Column="27" TopLine="769"/>
+        <Caret Line="1174" Column="12" TopLine="276"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="773" Column="33" TopLine="755"/>
+        <Caret Line="1170" Column="33" TopLine="1157"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="864" Column="18" TopLine="848"/>
+        <Caret Line="163" Column="49" TopLine="153"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="220" Column="40" TopLine="204"/>
+        <Caret Line="1157" Column="14" TopLine="1150"/>
       </Position>
       <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="777" TopLine="769"/>
+        <Filename Value="NetAnalyse.ppr"/>
+        <Caret Line="23"/>
       </Position>
       <Position>
-        <Filename Value="unit3.pas"/>
-        <Caret Line="45" Column="3"/>
+        <Filename Value="NetAnalyse.ppr"/>
+        <Caret Line="24" Column="103"/>
       </Position>
       <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="11" Column="85"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="8" Column="89"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\CT Project\EvsSimpleGraph-master\usimplegraph.pas"/>
-      </Position>
-      <Position>
-        <Filename Value="unit2.pas"/>
-        <Caret Line="116" Column="89" TopLine="97"/>
+        <Filename Value="NetAnalyse.ppr"/>
+        <Caret Line="23"/>
       </Position>
     </JumpHistory>
     <RunParams>

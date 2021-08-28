@@ -5,7 +5,7 @@ unit NetworkGraph;
 interface
 
 uses
-  Classes, SysUtils, uSimpleGraph,  Dialogs, DOM, Graphics, fgl, Windows, Menus  ;
+  Classes, SysUtils, uSimpleGraph,  DOM, Graphics, fgl, Menus  ;
 
 Type
   TNetGraph           = class;
@@ -143,31 +143,7 @@ Type
   { TRouterLink }
 
   TRouterLink = class(TEvsGraphLink)
-{  private
-    fPoints           : usimplegraph.TPoints;
-    fPointCount       : integer;
-    fSource           : TEvsGraphObject;
-    fTarget           : TEvsGraphObject;
-    fTextPosition     : integer;
-    fTextSpacing      : integer;
-    fBeginStyle       : TEvsLinkBeginEndStyle;
-    fBeginSize        : byte;
-    fEndStyle         : TEvsLinkBeginEndStyle;
-    fEndSize          : byte;
-    fLinkOptions      : TEvsGraphLinkOptions;
-    fTextRegion       : HRGN;
-    fTextAngle        : double;
-    fTextCenter       : TPoint;
-    fTextLine         : integer;
-    fChangeMode       : TEvsLinkChangeMode;
-    fAcceptingHook    : boolean;
-    fHookingObject    : TEvsGraphObject;
-    fMovingPoint      : integer;
-    SourceID          : DWORD;
-    TargetID          : DWORD;
-    UpdatingEndPoints : boolean;
-    CheckingLink      : boolean;
-}
+
   private
     fISISMetric : Integer;
     fISISLevel : Integer;
@@ -178,7 +154,6 @@ Type
     procedure SetDisabled(value: Boolean);
   protected
     procedure DrawText(aCanvas: TCanvas); override;                              //IMPLEMENTATION REQUIRED
-//    function CreateTextRegion: HRGN; override;
   public
     procedure Assign(SourceN: TPersistent);    Override;
 
@@ -211,12 +186,8 @@ Type
 
   published
     property DemandList : TDemandList read fDemandList write fDemandList;
-
-//    property Hostname: String read fHostName write SetHostName;
-
-
     function LoadJunosISISXML(filename, routerpic : String) : Boolean;
-    function LoadCiscoISISCLI(filename : String) : Boolean;
+    function LoadCiscoISISCLI(filename, routerpic : String) : Boolean;
     function AreAdjacents(Node1, Node2 : TEVsGraphNode) : Boolean;
     function AdjCost(Source, Target : TEVsGraphNode) : Integer;
     function PathCost(Source, Target : TEVsGraphNode) : Integer;
@@ -252,16 +223,13 @@ Type
 
 
 
-  //  procedure LoadFromFile(const aFilename: string);
 
   end;
-
- // function HalfCenterOfPoints(const Points: array of TPoint): TPoint;
 
 
 implementation
 uses
-  XMLRead, XMLWrite, StrUtils;
+  XMLRead, XMLWrite, StrUtils, Windows, Dialogs ;
 
 
 var
@@ -335,7 +303,8 @@ Begin
                 RNode1.RouterID := TLVList[j].FindNode('ipaddress-tlv').FindNode('address').TextContent;
 
           end;
-          RNode1.Background.Loadfromfile(routerpic);
+          If fileexists(routerpic) then
+            RNode1.Background.Loadfromfile(routerpic);
 
         end
          else
@@ -349,7 +318,6 @@ Begin
           PNode1.HostNameID := HostName;
           PNode1.HostName := LeftStr(HostName, Length(HostName) - 3);
           PNode1.Parent := (FindRouterByName(LeftStr(HostName, Length(HostName) - 3)+ '.00')) as TRouterNode;
-//          PNode1.Background.Loadfromfile('C:\Personal\Delphi Projects\Net-Analysis\router1.bmp');
         end;
 
       end;
@@ -368,7 +336,6 @@ Begin
     Ntw.Add(Copy(NetworkList[i].FindNode('address-prefix').TextContent, 1, Pos('/', NetworkList[i].FindNode('address-prefix').TextContent)-1));
     Ntw.Add(Copy(NetworkList[i].FindNode('address-prefix').TextContent, Pos('/', NetworkList[i].FindNode('address-prefix').TextContent)+1, Length(NetworkList[i].FindNode('address-prefix').TextContent)));
 
-//    Ntw.Add(NetworkList[i].FindNode('address-prefix').TextContent);
     Ntw.Add(NetworkList[i].FindNode('metric').TextContent);
     Ntw.Add(NetworkList[i].FindNode('prefix-flag').TextContent);
     Ntw.Add(NetworkList[i].FindNode('prefix-status').TextContent);
@@ -388,9 +355,6 @@ Begin
 
     If not ((FindRouterByName(HostName) = nil) or (FindRouterbyName(RemoteName) = nil)) then
     Begin
-//      If (Hostname = 'gfd-dc-d.00') or (RemoteName = 'gfd-dc-d.00') then
-//        showmessage(' Remote Name is: ' + RemoteName+ ', ' {+ FindRouterByName(RemoteName).Text});
-//      showmessage('Hostname is: ' + Hostname + ', ' + FindRouterByName(HostName).Text + ' Remote Name is: ' + RemoteName+ ', ' + FindRouterByName(RemoteName).Text);
       Link1 := InsertLink(FindRouterByName(HostName), FindRouterbyName(RemoteName), TRouterLink) as TRouterLink;
       Link1.Text:= IsNeighList[i].FindNode('metric').TextContent;
       Link1.ISISMetric:= StrtoInt(IsNeighList[i].FindNode('metric').TextContent);
@@ -410,29 +374,24 @@ Begin
 end;
 
 
-function TNetGraph.LoadCiscoISISCLI(filename : String) : Boolean;
+function TNetGraph.LoadCiscoISISCLI(filename, routerpic : String) : Boolean;
 Var
   RNode1 : TRouterNode;
   PNode1 : TPseudoNode;
   Rect1 : Trect;
-  i , j, Level : integer;
+  i , Level : integer;
   Levels : Array[0..10] of String;
-  HostName, RemoteName : String;
+  HostName : String;
   Link1 : TRouterLink;
-  Networks, Ntw, ISISData, ISISFile, temp1 : TstringList;
+  ISISData, ISISFile, temp1 : TstringList;
 
 Begin
   Randomize;
   Result := false;
 
-  Networks := TStringList.Create;
-  Ntw := TStringList.Create;
   ISISFile := TStringList.Create;
   ISISData := TStringList.Create;
   temp1 := TStringList.Create;
-//  Canvas.TextStyle.Opaque:= True;
-
-//  Statusbar1.SimpleText := 'Checking if file exists';
 
   If fileexists(filename) then
     Begin
@@ -447,7 +406,6 @@ Begin
   For i := 2 to ISISFile.Count -1 do
   Begin
     Level := (Length(ISISFile[i]) - Length(TrimLeft(ISISFile[i]))) div 2;
-//    Levels[Level] := ISISData[0];
 
     If Level = 0 then
     Begin
@@ -472,7 +430,8 @@ Begin
          RNode1.HostNameID := HostName;
          RNode1.HostName := LeftStr(HostName, Length(HostName) - 3);
 
-         RNode1.Background.Loadfromfile('.\router1.bmp');
+         If fileexists(routerpic) then
+           RNode1.Background.Loadfromfile(routerpic);
 
        end
            else
@@ -486,7 +445,6 @@ Begin
             PNode1.HostNameID := HostName;
             PNode1.HostName := LeftStr(HostName, Length(HostName) - 3);
             PNode1.Parent := (FindRouterByName(LeftStr(HostName, Length(HostName) - 3)+ '.00')) as TRouterNode;
-  //          PNode1.Background.Loadfromfile('C:\Personal\Delphi Projects\Net-Analysis\router1.bmp');
        end;
 
      end;
@@ -497,12 +455,6 @@ Begin
     Begin
       ISISData.Delimiter:= ':';
       ISISData.DelimitedText := Trim(ISISFile[i]);
-  {
-      If ISISData[0] = 'Hostname' then
-      Begin
-        (FindRouterByName(Levels[0]) as TRouterNode).Hostname := Trim(ISISData[1]);
-      end;
-  }
       If ISISData[0] = 'IP Address' then
       Begin
         (FindRouterByName(Levels[0]) as TRouterNode).RouterID := Trim(ISISData[1]);
@@ -532,7 +484,8 @@ Begin
            RNode1.HostNameID := Temp1[2];
            RNode1.HostName := LeftStr(Temp1[2], Length(Temp1[2]) - 3);
 
-           RNode1.Background.Loadfromfile('.\router1.bmp');
+           If Fileexists(routerpic) then
+             RNode1.Background.Loadfromfile(routerpic);
           end;
 
           Link1 := InsertLink(FindRouterByName(Levels[0]), FindRouterbyName(Temp1[2]), TRouterLink) as TRouterLink;
@@ -542,150 +495,12 @@ Begin
           Link1.EndStyle := lsCircle;
 
         end;
-//        If FindRouterByName(Temp1[
-//        (FindRouterByName(Levels[0]) as TRouterNode).ISISarea := Trim(ISISData[1]);
       end;
 
     end;
 
   end;
 
- {
-  For i := 2 to ISISFile.Count -1 do
-  Begin
-    ISISData.DelimitedText := Trim(ISISFile[i]);
-    Level := (Length(ISISFile[i]) - Length(TrimLeft(ISISFile[i]))) div 2;
-    Levels[Level] := ISISData[0];
-
-    ISISData.Insert(0, InttoStr(Level));
-
-    If Level > 0 then
-    For j := 1 to Level do
-    Begin
-      ISISData.Insert(j, Levels[j-1]);
-    end;
-    Temp1.Add(ISISData.DelimitedText);
-
-  end;
-  Temp1.SaveToFile('.\ngtvnew.txt');
-}
-//  showmessage(ISISFile[2][1]);
-{
-  Level := StrtoInt(XNode1.FindNode('level').Textcontent);
-  TLVList := Doc.DocumentElement.GetElementsByTagName('isis-tlv');
-
-  For i := 0 to XNode1.ChildNodes.Count -1 do
-  Begin
-    If XNode1.ChildNodes[i].NodeName = 'isis-database-entry' then
-    Begin
-//      HostName := XNode1.ChildNodes[i].FindNode('lsp-id').TextContent;
-      HostName := XNode1.ChildNodes[i].FindNode('lsp-id').FirstChild.NodeValue ;
-      HostName := LeftStr(HostName, Length(HostName) -3);
-
-      If FindRouterByName(HostName) = nil then
-      Begin
-        If RightStr(HostName, 2) = '00' then
-        Begin
-          Rect1.Top := Random(Self.Height - 200) + 100;
-          Rect1.Left:= Random(Self.Width - 200) + 100;
-          Rect1.Width:= 70;
-          Rect1.Height := Rect1.Width;
-
-          RNode1 := InsertNode(Rect1, TRouterNode) as TRouterNode;
-          RNode1.Text := LeftStr(HostName, Length(HostName) - 3);
-          RNode1.HostNameID := HostName;
-          RNode1.HostName := LeftStr(HostName, Length(HostName) - 3);
-
-          For j := 0 to TLVList.Count -1 do
-          If TLVList[j].FindNode('hostname-tlv') <> nil then
-          If LeftStr(HostName, Length(HostName) - 3) = TLVList[j].FindNode('hostname-tlv').FindNode('hostname').TextContent then
-          Begin
-            If TLVList[j].FindNode('area-address-tlv') <> nil then
-              RNode1.ISISarea := TLVList[j].FindNode('area-address-tlv').FindNode('address').TextContent;
-            If TLVList[j].FindNode('router-id-tlv') <> nil then
-              RNode1.RouterID := TLVList[j].FindNode('router-id-tlv').FindNode('router-id').TextContent
-                else
-              If TLVList[j].FindNode('ipaddress-tlv') <> nil then
-                RNode1.RouterID := TLVList[j].FindNode('ipaddress-tlv').FindNode('address').TextContent;
-//            Break;
-
-//            If TLVList[j].FindNode('area-address-tlv') <> nil then
-//              RNode1.ISISarea := TLVList[j].FindNode('area-address-tlv').FindNode('address').TextContent;
-
-          end;
-          // RNode1.Layout.;
-          RNode1.Background.Loadfromfile('.\router1.bmp');
-
-        end
-         else
-        Begin
-          Rect1.Top := Random(Self.Height - 200) + 100;
-          Rect1.Left:= Random(Self.Width - 200) + 100;
-          Rect1.Width:= 25;
-          Rect1.Height := Rect1.Width;
-          PNode1 := InsertNode(Rect1, TPseudoNode) as TPseudoNode;
-          PNode1.Text := HostName;
-          PNode1.HostNameID := HostName;
-          PNode1.HostName := LeftStr(HostName, Length(HostName) - 3);
-          PNode1.Parent := (FindRouterByName(LeftStr(HostName, Length(HostName) - 3)+ '.00')) as TRouterNode;
-//          PNode1.Background.Loadfromfile('C:\Personal\Delphi Projects\Net-Analysis\router1.bmp');
-        end;
-
-      end;
-    end;
-  end;
-
-  NetworkList := Doc.DocumentElement.GetElementsByTagName('isis-prefix');
-  For i := 0 to NetworkList.Count -1 do
-  Begin
-    Ntw.Clear;
-    Hostname := NetworkList[i].ParentNode.FindNode('lsp-id').TextContent;
-    HostName := LeftStr(HostName, Length(HostName) -6);
-    Ntw.Add(HostName);
-    Ntw.Add(NetworkList[i].FindNode('protocol-name').TextContent);
-    Ntw.Add(NetworkList[i].FindNode('isis-topology-id').TextContent);
-    Ntw.Add(Copy(NetworkList[i].FindNode('address-prefix').TextContent, 1, Pos('/', NetworkList[i].FindNode('address-prefix').TextContent)-1));
-    Ntw.Add(Copy(NetworkList[i].FindNode('address-prefix').TextContent, Pos('/', NetworkList[i].FindNode('address-prefix').TextContent)+1, Length(NetworkList[i].FindNode('address-prefix').TextContent)));
-
-//    Ntw.Add(NetworkList[i].FindNode('address-prefix').TextContent);
-    Ntw.Add(NetworkList[i].FindNode('metric').TextContent);
-    Ntw.Add(NetworkList[i].FindNode('prefix-flag').TextContent);
-    Ntw.Add(NetworkList[i].FindNode('prefix-status').TextContent);
-    Ntw.StrictDelimiter := True;
-    Networks.Add(Ntw.DelimitedText);
-  end;
-
-  ISNeighList := Doc.DocumentElement.GetElementsByTagName('isis-neighbor');
-  For i := 0 to IsNeighList.Count -1 do
-  Begin
-
-    Hostname := IsNeighList[i].ParentNode.FindNode('lsp-id').TextContent;
-    HostName := LeftStr(HostName, Length(HostName) -3);
-
-
-    RemoteName := IsNeighList[i].FindNode('is-neighbor-id').TextContent;
-
-    If not ((FindRouterByName(HostName) = nil) or (FindRouterbyName(RemoteName) = nil)) then
-    Begin
-//      If (Hostname = 'gfd-dc-d.00') or (RemoteName = 'gfd-dc-d.00') then
-//        showmessage(' Remote Name is: ' + RemoteName+ ', ' {+ FindRouterByName(RemoteName).Text});
-//      showmessage('Hostname is: ' + Hostname + ', ' + FindRouterByName(HostName).Text + ' Remote Name is: ' + RemoteName+ ', ' + FindRouterByName(RemoteName).Text);
-      Link1 := InsertLink(FindRouterByName(HostName), FindRouterbyName(RemoteName), TRouterLink) as TRouterLink;
-      Link1.Text:= IsNeighList[i].FindNode('metric').TextContent;
-      Link1.ISISMetric:= StrtoInt(IsNeighList[i].FindNode('metric').TextContent);
-      Link1.ISISLevel := Level;
-      Link1.EndStyle := lsCircle;
-
-    end;
-
-  end;
-  XNode1.Free;
-  ISNeighList.Free;
-  NetworkList.Free;
-  Networks.SaveToFile('.\isis-routes4.csv');
-  Networks.Free;
-  Ntw.Free;
- }
 end;
 
 
@@ -793,7 +608,10 @@ Begin
     end;
     writeXMLFile(Doc, OSFileName);                     // write to XML
   finally
-    Doc.Free;
+    Begin
+       Doc.Free;
+       Result := True;
+    end;
   end;
 end;
 
@@ -894,26 +712,6 @@ begin
   end;
 end;
 
-{
-procedure TRouterNode.DrawBorder(Canvas: TCanvas);
-Var
- pic : TBitmap;
- Rect1 : TRect;
-begin
-  pic := TBitmap.Create;
-  pic.LoadFromFile('C:\Personal\Delphi Projects\Net-Analysis\router1.bmp');
-  Rect1.Left := Left;
-  Rect1.Top := Top;
-  Rect1.Width := Width;
-  Rect1.Height := Height;
-
-  Canvas.StretchDraw(Rect1, pic);
-//  Canvas.TextRect(Rect1, 'test');
-  if fshowHost then
-    Canvas.TextOut(Left + (Width - Canvas.TextWidth(fHostName)) div 2, Top + (Height - Canvas.TextHeight(fHostName)) div 2, fHostName);
-//  Canvas.Ellipse(Left, Top, Left + Width, Top + Height);
-end;
-}
 
 function TNetGraph.FindRouterByName(HostNameID: String): TEvsGraphObject;
 var
@@ -957,55 +755,7 @@ end;
 
 
 procedure TNetGraph.SaveGraphML(const Filename: String);
-//Var
-//  XML : TXMLDOCUMENT;
-//  Graph , CurNode : TDOMNODE;
-//  GraphXML : TDOMNODE;
-//  i : integer;
 begin
-{  XML := TXMLDocument.Create;
-//  XML := IXMLDocument.Create(nil);
-  XML.XMLEncoding := 'UTF-8';
-//  XML.Options := [doNodeAutoIndent]; // looks better in Editor ;)
-
-  GraphXML := XML.CreateElement('graphxml');
-  XML.Appendchild(GraphXML);
-
-//  GraphXML := XML.AddChild('graphxml');
-
-//  GraphXML.DeclareNamespace('', 'http://graphml.graphdrawing.org/xmlns');
-//  GraphXML.DeclareNamespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-//  GraphXML.DeclareNamespace('schemaLocation', 'http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd');
-
-//  GraphXML.Attributes['xmlns:xsi'] := 'http://www.w3.org/2001/XMLSchema-instance';
-//  GraphXML.Attributes['xsi:schemaLocation'] := 'http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd';
-//  GraphXML.Attributes['xmlns'] := 'http://graphml.graphdrawing.org/xmlns';
-
-  Graph := GraphXML.AddChild('graph', 'http://graphml.graphdrawing.org/xmlns');
-//  Graph.Attributes['id'] := 'Graph';
-  Graph.Attributes['edgedefault'] := 'directed';
-
-  for i := 0 to (ObjectsCount) - 1 do
-  Begin
-    if Objects[i].IsNode then
-    Begin
-      CurNode := Graph.AddChild('node');
-      CurNode.Attributes['id'] := Objects[i].Text;
-    End;
-
-    if Objects[i].IsLink then
-    Begin
-      CurNode := Graph.AddChild('edge');
-      CurNode.Attributes['id'] := InttoStr((Objects[i] as TGraphLink).ID);
-      CurNode.Attributes['source'] := (Objects[i] as TGraphLink).Source.Text;
-      CurNode.Attributes['target'] := (Objects[i] as TGraphLink).Target.Text;
-
-
-    End;
-
-  End;
-  XML.SaveToFile(Filename);
-}
 end;
 
 function TNEtGraph.AreAdjacents(Node1, Node2 : TEVsGraphNode) : Boolean;
@@ -1403,23 +1153,6 @@ Begin
          else
        GraphObject.LinkInputs[0].Delete;
    end;
-  {
-    While GraphObject.DependentCount > 0 do
-    Begin
-      If  GraphObject.Dependents[0].IsLink then
-      Begin
-        If (GraphObject.Dependents[0] as TEvsGraphLink).Source.ClassName = 'TPseudoNode' then
-         If ((GraphObject.Dependents[0] as TEvsGraphLink).Source as TPseudoNode).Hostname = (GraphObject as TRouterNode).Hostname then
-            DeletePseudo((GraphObject.Dependents[0] as TEvsGraphLink).Source);
-
-        If (GraphObject.Dependents[0] as TEvsGraphLink).Target.ClassName = 'TPseudoNode' then
-         If ((GraphObject.Dependents[0] as TEvsGraphLink).Target as TPseudoNode).Hostname = (GraphObject as TRouterNode).Hostname then
-         DeletePseudo((GraphObject.Dependents[0] as TEvsGraphLink).Target);
-
-
-        GraphObject.Dependents[0].Delete;
-      end;
-    end;      }
     If GraphObject.Delete then Result := True;
 
   end;
@@ -1786,8 +1519,6 @@ Begin
 
       PathLinks := TEvsGraphObjectList.Create;
       RemPathLinks := TEvsGraphObjectList.Create;
-//      SourceNodes := TEvsGraphObjectList.Create;
-//      TargetNodes := TEvsGraphObjectList.Create;
 
       For i := 0 to Length(SPF.SPFLists) -1 do
        For j := 0 to SPF.SPFLists[i].Count  -1 do
@@ -1796,10 +1527,8 @@ Begin
            Begin
              PathLinks.Add(SPF.SPFLists[i][j]);
              RemPathLinks.Add(SPF.SPFLists[i][j]);
-//             SourceNodes.Add((SPF.SPFLists[i][j] as TRouterLink).Source);
              ((SPF.SPFLists[i][j] as TRouterLink).Source as TNetworkNode).fTrafficShare := MaxInt;
              ((SPF.SPFLists[i][j] as TRouterLink).Source as TNetworkNode).fDemandLevel := 0;
-//             TargetNodes.Add((SPF.SPFLists[i][j] as TRouterLink).Target);
            end;
        end;
 
@@ -1926,81 +1655,6 @@ begin
   end;
 end;
 
-{
-function TRouterLink.CreateTextRegion: HRGN;
-const
-  cDrawTextFlags = DT_NOPREFIX or DT_END_ELLIPSIS or DT_EDITCONTROL or
-    DT_MODIFYSTRING or DT_CALCRECT;
-var
-  vRgnPts     : array[1..4] of TPoint;
-  vLineMargin : integer;
-  vLineWidth  : integer;
-  vTextRect   : TRect=(Left:0;Top:0;Right:0;Bottom:0);
-  vTextOfs    : integer;
-  vTmpText    : string;
-  vCanvas     : TCanvas;
-  vSize       : TSize;
-begin
-  Result := 0;
-  TextToShow := '';
-  if (Text <> '') and (PointCount >= 2) then
-  begin
-    fTextLine := TextPosition;
-    if (fTextLine < 0) or (fTextLine >= PointCount - 1) then
-    begin
-      fTextLine := IndexOfLongestLine;
-      if fTextLine < 0 then
-        Exit;
-    end;
-    if fTextLine = 0 then
-      vLineMargin := PointStyleOffset(BeginStyle, BeginSize)
-    else if fTextLine = PointCount - 2 then
-      vLineMargin := PointStyleOffset(EndStyle, EndSize)
-    else
-      vLineMargin := 0;
-    fTextCenter := HalfCenterOfPoints([fPoints[fTextLine], fPoints[fTextLine + 1]]);
-
-//    fTextCenter := CenterOfPoints([fPoints[fTextLine], fPoints[fTextLine + 1]]);
-    fTextAngle := LineSlopeAngle(fPoints[fTextLine], fPoints[fTextLine + 1]);
-    vLineWidth := Trunc(LineLength(fPoints[fTextLine], fPoints[fTextLine + 1]));
-    Dec(vLineWidth, Pen.Width + vLineMargin);
-    if vLineWidth > 0 then
-    begin
-      SetRect(vTextRect, 0, 0, vLineWidth, 0);
-      vTmpText := Trim(Text);
-      SetLength(vTmpText, Length(vTmpText) + 4);
-      vCanvas := TEvsCompatibleCanvas.Create;
-      try
-        vCanvas.Font := Font;
-        vSize := vCanvas.TextExtent(vTmpText);
-        vTextRect.Bottom := vSize.cy;
-        vTmpText := MinimizeText(vCanvas, vTmpText, vTextRect);
-      finally
-        vCanvas.Free;
-      end;
-      TextToShow := vTmpText;
-      if (TextAngle > Pi / 2) or (TextAngle < -Pi / 2) then
-        vTextOfs := vTextRect.Top + (TextSpacing + (Pen.Width + 1) div 2)
-      else
-        vTextOfs := vTextRect.Top - (TextSpacing + (Pen.Width + 1) div 2);
-      fTextCenter := NextPointOfLine(TextAngle - Pi / 2, fTextCenter, vTextOfs);
-      fTextCenter := NextPointOfLine(TextAngle, fTextCenter, vLineMargin div 2);
-      OffsetRect(vTextRect, fTextCenter.X - vTextRect.Right div 2,
-        fTextCenter.Y - vTextRect.Bottom);
-      vRgnPts[1] := vTextRect.TopLeft;
-      vRgnPts[2] := Types.Point(vTextRect.Right, vTextRect.Top);
-      vRgnPts[3] := vTextRect.BottomRight;
-      vRgnPts[4] := Types.Point(vTextRect.Left, vTextRect.Bottom);
-
-      if Abs(TextAngle) > Pi / 2 then
-        RotatePoints(vRgnPts, TextAngle - Pi, TextCenter)
-      else
-        RotatePoints(vRgnPts, TextAngle, TextCenter);
-      Result := CreatePolygonRgn({$IFNDEF WIN}@{$ENDIF}vRgnPts[1], 4, ALTERNATE);
-    end;
-  end;
-end;
-}
 
 procedure TRouterLink.DrawText(aCanvas: TCanvas);
 var
@@ -2028,49 +1682,17 @@ begin
       vPoint := TextCenter;
       vPt.x := vPoint.x - (vSize.cx div 2);
       vPt.y := vPoint.y - vSize.cy;
-{      if Abs(TextAngle) > Pi / 2 then begin
-        aCanvas.Font.Orientation := Round(-1800 * (TextAngle - Pi) / Pi);
-        RotatePoints(vPt, TextAngle - Pi, TextCenter);
-      end
-      else begin
-        aCanvas.Font.Orientation := Round(-1800 * TextAngle / Pi);
-        RotatePoints(vPt, TextAngle, TextCenter);
-      end;
-}
       aCanvas.Font.Orientation := Round(-1800 * TextAngle / Pi);
       RotatePoints(vPt, TextAngle, TextCenter);
 
-//      aCanvas.Font.Orientation := Round(-1800 * (TextAngle - Pi) / Pi);
-//      RotatePoints(vPt, TextAngle - Pi, TextCenter);
-
       aCanvas.TextStyle := vTextStyle;
       aCanvas.TextOut(vPt.x,vPt.y,TextToShow);
-//      showmessage(FloattoStr(TextAngle));
-//      showmessage(InttoStr(Polyline[0].x) + ' ' + InttoStr(vPoint.x) + ' ' + InttoStr(Polyline[1].x) + ' ' + InttoStr(Polyline[0].y) + ' ' + InttoStr(vPoint.y) + ' ' + InttoStr(Polyline[1].y) + ' ' + TextToShow);
    finally
       vCnvBck.Free;
     end;
   end;
 end;
 
-{
-function HalfCenterOfPoints(const Points: array of TPoint): TPoint;
-var
-  I: integer;
-  Sum: TPoint;
-begin
-  Sum.X := 0;
-  Sum.Y := 0;
-  for I := Low(Points) to High(Points) do
-    with Points[I] do
-    begin
-      Inc(Sum.X, X);
-      Inc(Sum.Y, Y);
-    end;
-  Result.X := Sum.X div (Length(Points) * 2);
-  Result.Y := Sum.Y div (Length(Points) * 2);
-end;
-}
 
 function TNetGraph.AddDemand(DemandName: String; Source : TRouterNode; Targets : TEvsGraphObjectList; Bandwidth : Longword) : Integer;
 var
@@ -2227,8 +1849,6 @@ Begin
 end;
 
 function TNetGraph.RemoveDemand(Demand: TDemand) : Integer;
-var
-  i : integer;
 Begin
   If DemandList.Remove(Demand) <> -1 then
     Result := 0
@@ -2304,21 +1924,13 @@ end;
 procedure TNetGraph.DoObjectContextPopup(aGraphObject: TEvsGraphObject;
   const aMousePos: TPoint; var aHandled: boolean);
 begin
-{  Case aGraphObject.ClassName of
-    'TRouterNode' :  showmessage('Router');
-    'TRouterLink' : showmessage('Link');
-  end;
-}
   Inherited;
-//  if Assigned(fOnObjectContextPopup) then
-//    fOnObjectContextPopup(Self, aGraphObject, aMousePos, aHandled);
 end;
 
 
 procedure TNetGraph.DoContextPopup(aMousePos :TPoint; var Handled :Boolean);
 procedure NoObject;
 begin
-//  showmessage('0');
   inherited DoContextPopup(aMousePos, Handled);
 end;
 
@@ -2382,19 +1994,6 @@ begin
      Handled := True;
 end;
 
-{
-procedure TNEtGraph.LoadFromFile(const aFilename: string);
-var
-  vStream: TFileStream;
-begin
-  vStream := TFileStream.Create(aFilename, fmOpenRead or fmShareDenyWrite);
-  try
-    LoadFromStream(vStream);
-  finally
-    vStream.Free;
-  end;
-end;
-}
 
 procedure _RegisterClasses;
 begin
