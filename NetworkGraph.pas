@@ -149,9 +149,12 @@ Type
     fISISLevel : Integer;
     fDemandLevel : Real;
     fDisabled  : Boolean;
+    fDelay : Integer;
     procedure SetISISMetric(Value: Integer);
     procedure SetISISLevel(Value: Integer);
     procedure SetDisabled(value: Boolean);
+    procedure SetDelay(value: Integer);
+
   protected
     procedure DrawText(aCanvas: TCanvas); override;                              //IMPLEMENTATION REQUIRED
   public
@@ -161,6 +164,7 @@ Type
     property ISISMetric: Integer read fISISMetric write SetISISMetric;
     property ISISLevel: Integer read fISISLevel write SetISISLevel;
     property Disabled : Boolean read fDisabled write SetDisabled;
+    property Delay: Integer read fDelay write SetDelay;
     function DemandThroughput : Real;
 
   end;
@@ -332,7 +336,7 @@ Begin
     HostName := LeftStr(HostName, Length(HostName) -6);
     Ntw.Add(HostName);
     Ntw.Add(NetworkList[i].FindNode('protocol-name').TextContent);
-    Ntw.Add(NetworkList[i].FindNode('isis-topology-id').TextContent);
+//    Ntw.Add(NetworkList[i].FindNode('isis-topology-id').TextContent);
     Ntw.Add(Copy(NetworkList[i].FindNode('address-prefix').TextContent, 1, Pos('/', NetworkList[i].FindNode('address-prefix').TextContent)-1));
     Ntw.Add(Copy(NetworkList[i].FindNode('address-prefix').TextContent, Pos('/', NetworkList[i].FindNode('address-prefix').TextContent)+1, Length(NetworkList[i].FindNode('address-prefix').TextContent)));
 
@@ -687,6 +691,15 @@ begin
     fISISMetric := Value;
   end;
 end;
+
+procedure TRouterLink.SetDelay(Value: Integer);
+begin
+  if Delay <> Value then
+  begin
+    fDelay := Value;
+  end;
+end;
+
 
 procedure TRouterLink.SetISISLevel(Value: Integer);
 begin
